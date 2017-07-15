@@ -1,0 +1,2 @@
+# Minimap
+Tests with minimaps
