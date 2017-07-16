@@ -29,7 +29,7 @@ public class MinimapUI : MonoBehaviour
 	{
 		m_RawImage.texture = updatedTexture;
 
-		m_Material.SetFloat (maxId, maxHeight);
-		m_Material.SetFloat (minId, minHeight);
+		m_Material.SetFloat (maxId, minHeight - minimapCamera.transform.position.y);
+		m_Material.SetFloat (minId, maxHeight - minimapCamera.transform.position.y);
 	}
 }

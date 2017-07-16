@@ -25,7 +25,7 @@ public class MinimapCamera : MonoBehaviour
 		Vector3 newPosition = transform.position;
 
 		newPosition.x = targetToFollow.position.x;
-		newPosition.y = targetToFollow.position.y;
+		newPosition.z = targetToFollow.position.z;
 
 		transform.position = newPosition;
 	}
