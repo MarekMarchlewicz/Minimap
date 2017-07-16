@@ -5,18 +5,19 @@ public class MinimapCamera : MonoBehaviour
 {
 	[SerializeField] private Transform targetToFollow;
 
-	public System.Action<Texture> OnUpdatedTexture;
+	public System.Action<RenderTexture, RenderTexture> OnUpdatedTexture;
 
 	private void Awake()
 	{
 		GetComponent<Camera> ().depthTextureMode = DepthTextureMode.Depth;
 	}
 
+	[ImageEffectOpaque]
 	private void OnRenderImage(RenderTexture source, RenderTexture destination)
 	{
 		if (OnUpdatedTexture != null) 
 		{
-			OnUpdatedTexture (source);
+			OnUpdatedTexture (source, destination);
 		}
 	}
 
