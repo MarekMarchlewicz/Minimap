@@ -26,14 +26,12 @@
 			{
 				float4 vertex : POSITION;
 				float2 uv : TEXCOORD0;
-				float4 ray : TEXCOORD1;
 			};
 
 			struct v2f
 			{
 				float2 uv_depth : TEXCOORD0;
 				float4 vertex : SV_POSITION;
-				float4 interpolatedRay : TEXCOORD1;
 			};
 
 			sampler2D _MainTex;
@@ -51,21 +49,17 @@
 				v2f o;
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv_depth = v.uv.xy;
-				o.interpolatedRay = v.ray;
 
 				return o;
 			}
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-				fixed height = DecodeFloatRG(tex2D(_CameraDepthTexture, i.uv_depth));
-				float linearDepth = Linear01Depth(height);
+				float height = 1 - DecodeFloatRG(tex2D(_CameraDepthTexture, i.uv_depth));
+				height = _WSCameraPos.y - height * _CameraDistance;
 
-				float normalizedHeight = _WSCameraPos.y - height * (_CameraDistance);
-				normalizedHeight = normalizedHeight - _MinHeight / (_MaxHeight - _MinHeight);
-
-				//normalizedHeight = saturate(normalizedHeight);
-
+				float normalizedHeight = saturate((height - _MinHeight) / (_MaxHeight - _MinHeight));
+				
 				fixed4 col = tex2D(_LookupTex, float2(normalizedHeight, 0.5));
 				return col;
 			}

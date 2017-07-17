@@ -4,11 +4,22 @@ using UnityEngine.UI;
 [RequireComponent(typeof(RawImage))]
 public class MinimapUI : MonoBehaviour 
 {
-	[SerializeField] private MinimapCamera minimapCamera;
+	[SerializeField]
+    private MinimapCamera minimapCamera;
 
-	[SerializeField] private Terrain terrain;
+	[SerializeField]
+    private Terrain terrain;
 
-	private float maxHeight, minHeight;
+    [SerializeField]
+    private Slider slider;
+
+    [SerializeField, Range(3f, 15f)]
+    private float minCameraSize = 3f;
+
+    [SerializeField, Range(3f, 15f)]
+    private float maxCameraSize = 15f;
+
+    private float maxHeight, minHeight;
 
 	private RawImage m_RawImage;
 
@@ -31,6 +42,9 @@ public class MinimapUI : MonoBehaviour
 		camDistId = Shader.PropertyToID ("_CameraDistance");
 		camPosId = Shader.PropertyToID ("_WSCameraPos");
 
+        slider.onValueChanged.AddListener((x) => m_Camera.orthographicSize = Mathf.Lerp(minCameraSize, maxCameraSize, x));
+        slider.value = 0.5f;
+
 		SetMinMaxPoints ();
 	}
 
@@ -39,8 +53,6 @@ public class MinimapUI : MonoBehaviour
 		m_Material.mainTexture = source;
 		m_Material.SetFloat (camDistId, m_Camera.farClipPlane - m_Camera.nearClipPlane);
 		m_Material.SetVector (camPosId, m_Camera.transform.position);
-
-		//RaycastCornerBlit (source, destination, m_Material);
 
 		m_RawImage.texture = destination;
 	}
