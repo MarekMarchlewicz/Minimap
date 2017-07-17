@@ -34,9 +34,7 @@ public class MinimapUI : MonoBehaviour
 		m_RawImage = GetComponent<RawImage> ();
 		m_Material = GetComponent<RawImage> ().material;
 		m_Camera = minimapCamera.GetComponent<Camera> ();
-
-		minimapCamera.OnUpdatedTexture += OnUpdateTexture;
-
+        
 		maxId = Shader.PropertyToID ("_MaxHeight");
 		minId = Shader.PropertyToID ("_MinHeight");
 		camDistId = Shader.PropertyToID ("_CameraDistance");
@@ -48,13 +46,16 @@ public class MinimapUI : MonoBehaviour
 		SetMinMaxPoints ();
 	}
 
-	private void OnUpdateTexture(RenderTexture source, RenderTexture destination)
+    private void Start()
+    {
+        //m_Material.mainTexture = minimapCamera.RenderTex;
+        m_RawImage.texture = minimapCamera.DepthTex;
+    }
+
+	private void Update()
 	{
-		m_Material.mainTexture = source;
 		m_Material.SetFloat (camDistId, m_Camera.farClipPlane - m_Camera.nearClipPlane);
 		m_Material.SetVector (camPosId, m_Camera.transform.position);
-
-		m_RawImage.texture = destination;
 	}
 
 	private void SetMinMaxPoints()
@@ -78,7 +79,7 @@ public class MinimapUI : MonoBehaviour
 		}
 
 		minHeight *= 600f;
-		maxHeight *= 600f;
+        maxHeight *= 600f;
 
 		m_Material.SetFloat (maxId, maxHeight);
 		m_Material.SetFloat (minId, minHeight);

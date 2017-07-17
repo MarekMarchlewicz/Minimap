@@ -55,10 +55,10 @@
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-				float height = 1 - DecodeFloatRG(tex2D(_CameraDepthTexture, i.uv_depth));
+				float height = 1 - DecodeFloatRG(tex2D(_MainTex, i.uv_depth));
 				height = _WSCameraPos.y - height * _CameraDistance;
 
-				float normalizedHeight = saturate((height - _MinHeight) / (_MaxHeight - _MinHeight));
+				float normalizedHeight = (height - _MinHeight) / (_MaxHeight - _MinHeight);
 				
 				fixed4 col = tex2D(_LookupTex, float2(normalizedHeight, 0.5));
 				return col;
