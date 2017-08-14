@@ -19,6 +19,9 @@ public class MinimapUI : MonoBehaviour
     [SerializeField, Range(3f, 15f)]
     private float maxCameraSize = 15f;
 
+    [SerializeField]
+    private float heightStretch = 1;
+
     private float maxHeight, minHeight;
 
 	private RawImage m_RawImage;
@@ -27,7 +30,7 @@ public class MinimapUI : MonoBehaviour
 
 	private Camera m_Camera;
 
-	private int minId, maxId, camDistId, camPosId;
+	private int minId, maxId, camDistId, camPosId, heightStretchId;
 
 	private void Awake()
 	{
@@ -39,6 +42,7 @@ public class MinimapUI : MonoBehaviour
 		minId = Shader.PropertyToID ("_MinHeight");
 		camDistId = Shader.PropertyToID ("_CameraDistance");
 		camPosId = Shader.PropertyToID ("_WSCameraPos");
+        heightStretchId = Shader.PropertyToID("_HeightStretch");
 
         slider.onValueChanged.AddListener((x) => m_Camera.orthographicSize = Mathf.Lerp(minCameraSize, maxCameraSize, x));
         slider.value = 0.5f;
@@ -48,7 +52,6 @@ public class MinimapUI : MonoBehaviour
 
     private void Start()
     {
-        //m_Material.mainTexture = minimapCamera.RenderTex;
         m_RawImage.texture = minimapCamera.DepthTex;
     }
 
@@ -56,6 +59,7 @@ public class MinimapUI : MonoBehaviour
 	{
 		m_Material.SetFloat (camDistId, m_Camera.farClipPlane - m_Camera.nearClipPlane);
 		m_Material.SetVector (camPosId, m_Camera.transform.position);
+        m_Material.SetFloat (heightStretchId, heightStretch);
 	}
 
 	private void SetMinMaxPoints()
