@@ -1,5 +1,5 @@
 # Minimap
-I was bored and tried to create a dynamically generated minimap from depth camera.
+I was bored and tried to create a dynamically generated minimap from depth camera. I though it would be fun to have a minimap that is able to adjust to changin terrain during runtime.
 
 ## Here are some results:
 
